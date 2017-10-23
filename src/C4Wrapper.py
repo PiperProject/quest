@@ -6,7 +6,7 @@
 #  IMPORTS  #
 #############
 # standard python packages
-import inspect, os, string, sys, time
+import logging, inspect, os, string, sys, time
 from ctypes import *
 from types  import *
 
@@ -20,8 +20,7 @@ class C4Wrapper( object ) :
   #  INIT  #
   ##########
   def __init__( self ) :
-
-    c4_lib_loc                     = os.path.abspath( __file__ + '/../../../lib/c4/build/src/libc4/libc4.dylib' )
+    c4_lib_loc                     = os.path.abspath( __file__ + '/../../lib/c4/build/src/libc4/libc4.dylib' )
     self.lib                       = cdll.LoadLibrary( c4_lib_loc )
     self.lib.c4_make.restype       = POINTER(c_char)
     self.lib.c4_dump_table.restype = c_char_p   # c4_dump_table returns a char*
@@ -30,7 +29,6 @@ class C4Wrapper( object ) :
   #########
   #  RUN  #
   #########
-  # fullprog is a string of concatenated overlog commands.
   def run( self, allProgramData ) :
 
     allProgramLines = allProgramData[0] # := list of every code line in the generated C4 program.
@@ -39,14 +37,9 @@ class C4Wrapper( object ) :
     completeProg    = "".join( allProgramLines )
 
     # ----------------------------------------- #
-    print "PRINTING LEGIBLE INPUT PROG"
-    for line in fullprog :
-      line = line.split( ";" )
-      for statement in line :
-        statement = statement.rstrip()
-        if not statement == "" :
-          statement = statement + ";"
-          print statement
+    logging.debug( "PRINTING LEGIBLE INPUT PROG" )
+    for statement in allProgramLines :
+      logging.debug( statement )
 
     # ----------------------------------------- #
     # initialize c4 instance
@@ -55,7 +48,8 @@ class C4Wrapper( object ) :
 
     # ---------------------------------------- #
     # load program
-    print "SUBMITTING SUBPROG : "
+    logging.debug( "SUBMITTING SUBPROG : " )
+    logging.debug( completeProg )
     c_prog = bytes( completeProg )
     self.lib.c4_install_str( self.c4_obj, c_prog )
 
@@ -84,10 +78,9 @@ class C4Wrapper( object ) :
     for table in tableList :
 
       # output to stdout
-      if DEBUG :
-        print "---------------------------"
-        print table
-        print self.lib.c4_dump_table( self.c4_obj, table )
+      logging.debug( "---------------------------" )
+      logging.debug( table )
+      logging.debug( self.lib.c4_dump_table( self.c4_obj, table ) )
 
       # save in array
       results_array.append( "---------------------------" )
