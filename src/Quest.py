@@ -15,8 +15,6 @@
 #        for Quest to work properly :
 #        { "a":["string"], "b":["string","int"], "c":["int","string"] }
 #
-# 2. //
-#
 ##########################################################################
 
 #############
@@ -30,13 +28,14 @@ import C4Wrapper
 
 # import sibling packages HERE!!!
 adaptersPath  = os.path.abspath( __file__ + "/../../../../adapters" )
-sys.path.append( adaptersPath )
-#from adapters import Adapter
+if not adaptersPath in sys.path :
+  sys.path.append( adaptersPath )
 import Adapter
 
 # settings dir
 settingsPath  = os.path.abspath( __file__ + "/../../core" )
-sys.path.append( settingsPath )
+if not settingsPath in sys.path :
+  sys.path.append( settingsPath )
 import settings
 
 # ------------------------------------------------------ #
@@ -44,7 +43,6 @@ import settings
 DEBUG = settings.DEBUG
 
 class Quest( object ) :
-
 
   ################
   #  ATTRIBUTES  #
