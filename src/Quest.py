@@ -233,7 +233,7 @@ class Quest( object ) :
       if all( a == arityList[0] for a in arityList ) :
         arity = arityList[0]
       else :
-        sys.exit( "ERROR : edb definitions for table '" + str( table ) + "' have inconsistent arities : " + str( arityList ) )
+        sys.exit( "ERROR : schema definitions for table '" + str( table ) + "' have inconsistent arities : " + str( arityList ) )
 
     # make sure arity is an integer
     if not arity == math.floor( arity ) :
